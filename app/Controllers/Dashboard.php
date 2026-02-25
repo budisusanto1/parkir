@@ -23,10 +23,15 @@ class Dashboard extends BaseController
         }
 
         // Log aktivitas akses dashboard
-        $this->logModel->logActivity(
-            session()->get('id_user'),
-            'Mengakses halaman Dashboard'
-        );
+        try {
+            $this->logModel->logActivity(
+                session()->get('id_user'),
+                'Mengakses halaman Dashboard'
+            );
+            log_message('info', 'Dashboard access logged for user ID: ' . session()->get('id_user'));
+        } catch (\Exception $e) {
+            log_message('error', 'Failed to log dashboard access: ' . $e->getMessage());
+        }
 
         $data = [
             'user' => [
@@ -36,6 +41,17 @@ class Dashboard extends BaseController
             ]
         ];
 
-        return view('dashboard/index', $data);
+        // Cek role dan tampilkan view yang sesuai
+        $role = session()->get('role');
+        
+        if ($role === 'owner') {
+            return view('dashboard/owner', $data);
+        } elseif (in_array($role, ['admin', 'superadmin'])) {
+            return view('dashboard/admin', $data);
+        } elseif ($role === 'petugas') {
+            return view('dashboard/petugas', $data);
+        } else {
+            return view('dashboard/user', $data);
+        }
     }
 }

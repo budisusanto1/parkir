@@ -44,9 +44,10 @@ class UserController extends BaseController
             'Mengakses halaman Manajemen User'
         );
 
+        // Clear any cache and get fresh data
         $data = [
             'title' => 'Manajemen User',
-            'users' => $this->userModel->findAll()
+            'users' => $this->userModel->orderBy('id_user', 'DESC')->findAll()
         ];
 
         return view('user/index', $data);
@@ -80,8 +81,15 @@ class UserController extends BaseController
             'username' => $this->request->getPost('username'),
             'password' => $this->request->getPost('password'),
             'nama_lengkap' => $this->request->getPost('nama_lengkap'),
-            'role' => 'petugas', // Set role otomatis ke petugas
+            'role' => 'petugas' // Set role otomatis ke petugas
         ];
+
+        // Custom validation untuk password length
+        $password = $this->request->getPost('password');
+        if (strlen($password) < 6) {
+            session()->setFlashdata('error', 'Password minimal 6 karakter! Saat ini: ' . strlen($password) . ' karakter');
+            return redirect()->back()->withInput();
+        }
 
         if (!$this->userModel->save($data)) {
             // Log aktivitas gagal
@@ -96,7 +104,7 @@ class UserController extends BaseController
         // Log aktivitas berhasil
         $this->logModel->logRegister($this->userModel->getInsertID(), $data['username']);
 
-        return redirect()->to('/auth/login')->with('success', 'Registrasi berhasil! Silakan login.');
+        return redirect()->to('/users')->with('success', 'User berhasil ditambahkan!');
     }
 
     public function edit($id)
@@ -146,8 +154,7 @@ class UserController extends BaseController
 
         $data = [
             'username' => $this->request->getPost('username'),
-            'nama_lengkap' => $this->request->getPost('nama_lengkap'),
-            'role' => $this->request->getPost('role')
+            'nama_lengkap' => $this->request->getPost('nama_lengkap')
         ];
 
         // Update password jika diisi

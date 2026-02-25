@@ -66,7 +66,7 @@ class Auth extends BaseController
             // Log aktivitas register berhasil
             $this->logModel->logRegister($this->userModel->getInsertID(), $data['username']);
 
-            return redirect()->to('/auth/login')->with('success', 'Registrasi berhasil! Silakan login.');
+            return redirect()->to('/auth/login')->with('success', 'Registrasi berhasil! Silakan login dengan username: ' . $data['username']);
         }
 
         // Tampilkan form registrasi
@@ -132,7 +132,12 @@ class Auth extends BaseController
                 session()->set($sessionData);
                 
                 // Log aktivitas login berhasil
-                $this->logModel->logLogin($user['id_user'], $user['username']);
+                try {
+                    $logResult = $this->logModel->logLogin($user['id_user'], $user['username']);
+                    log_message('info', 'Login log created for user ' . $user['username'] . ' with log ID: ' . $logResult);
+                } catch (\Exception $e) {
+                    log_message('error', 'Failed to create login log: ' . $e->getMessage());
+                }
                 
                 // Redirect ke dashboard setelah login berhasil
                 return redirect()->to('/dashboard')->with('success', 'Login berhasil! Selamat datang ' . $user['username']);

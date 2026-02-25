@@ -18,6 +18,23 @@ $routes->get('/auth', 'Auth::index');
 // Dashboard Route
 $routes->get('/dashboard', 'Dashboard::index');
 
+// Transaksi Routes (Petugas, Admin & Superadmin)
+$routes->get('/transaksi', 'TransaksiController::index');
+$routes->post('/transaksi/store', 'TransaksiController::storeMasuk');
+$routes->get('/transaksi/keluar', 'TransaksiController::keluar');
+$routes->post('/transaksi/keluar/(:num)', 'TransaksiController::processKeluar/$1');
+$routes->get('/transaksi/struk/(:num)', 'TransaksiController::cetakStruk/$1');
+$routes->get('/cetak-struk', 'TransaksiController::cetakStrukList'); // Halaman daftar struk
+
+// Rekap Transaksi Routes (Petugas, Admin & Superadmin)
+$routes->get('/rekap-transaksi', 'TestRekapController::index');
+$routes->post('/rekap-transaksi', 'RekapTransaksiController::rekapTransaksi');
+$routes->get('/transaksi/struk/(:num)', 'TestRekapController::cetakStruk/$1'); // Cetak struk dari rekap
+
+// Laporan Routes (Owner, Admin & Superadmin)
+$routes->get('/laporan/pendapatan', 'LaporanController::pendapatan');
+$routes->get('/laporan/statistik', 'LaporanController::statistik');
+
 // User Routes (Admin & Superadmin only)
 $routes->get('/users', 'UserController::index');
 $routes->get('/users/create', 'UserController::create');
@@ -73,6 +90,9 @@ $routes->get('/test-log-fix', 'TestLogFixController::index');
 
 // Test All Logs Route
 $routes->get('/test-all-logs', 'TestAllLogsController::index');
+
+// Test Log Debug Route
+$routes->get('/test-log-debug', 'TestLogDebug::index');
 
 // Enable auto routing
 $routes->setAutoRoute(true);

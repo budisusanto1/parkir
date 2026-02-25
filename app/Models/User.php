@@ -30,9 +30,8 @@ class User extends Model
     // Validation
     protected $validationRules      = [
         'username' => 'required|min_length[3]|max_length[100]|is_unique[tb_user.username]',
-        'password' => 'required|min_length[6]',
-        'nama_lengkap' => 'permit_empty|max_length[255]',
-        'g-recaptcha-response' => 'required'
+        'password' => 'permit_empty|min_length[6]',
+        'nama_lengkap' => 'permit_empty|max_length[255]'
     ];
     protected $validationMessages   = [
         'username' => [
@@ -47,9 +46,6 @@ class User extends Model
         ],
         'nama_lengkap' => [
             'max_length' => 'Nama lengkap maksimal 255 karakter'
-        ],
-        'g-recaptcha-response' => [
-            'required' => 'Silakan verifikasi reCAPTCHA'
         ]
     ];
     protected $skipValidation       = false;

@@ -170,9 +170,6 @@
 }
 </style>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <!-- Custom JavaScript -->
 <script>
 // Auto-hide navbar on scroll
@@ -211,6 +208,91 @@ const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 navLinks.forEach(link => {
     if (link.getAttribute('href') === currentPath) {
         link.classList.add('active');
+    }
+});
+
+// Manual dropdown control - TANPA Bootstrap JS
+document.addEventListener('DOMContentLoaded', function() {
+    // Debug: Check current role
+    console.log('Current user role:', '<?= session()->get('role') ?>');
+    console.log('Is logged in:', '<?= session()->get('isLoggedIn') ? 'true' : 'false' ?>');
+    
+    // Initialize all dropdowns dengan JavaScript murni
+    const dropdownTriggers = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+    console.log('Found dropdown triggers:', dropdownTriggers.length);
+    
+    dropdownTriggers.forEach(function(trigger) {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('Dropdown clicked:', trigger.textContent.trim());
+            
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
+                menu.classList.remove('show');
+            });
+            
+            // Toggle current dropdown
+            const dropdownMenu = trigger.nextElementSibling;
+            if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                dropdownMenu.classList.toggle('show');
+                console.log('Dropdown menu toggled:', dropdownMenu.classList.contains('show'));
+            }
+        });
+    });
+    
+    // Handle dropdown item clicks - PERBAIKAN
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    console.log('Found dropdown items:', dropdownItems.length);
+    
+    dropdownItems.forEach(function(item, index) {
+        console.log('Dropdown item', index, ':', item.href, item.textContent.trim());
+        
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('Dropdown item clicked:', this.href);
+            console.log('Dropdown item text:', this.textContent.trim());
+            
+            // Close dropdown
+            document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
+                menu.classList.remove('show');
+            });
+            
+            // Navigate to URL
+            if (this.href && this.href !== '#') {
+                console.log('Navigating to:', this.href);
+                window.location.href = this.href;
+            } else {
+                console.log('Invalid href:', this.href);
+            }
+        });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('[data-bs-toggle="dropdown"]')) {
+            document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                menu.classList.remove('show');
+            });
+        }
+    });
+    
+    // Close dropdowns when pressing Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                menu.classList.remove('show');
+            });
+        }
+    });
+    
+    // Debug: Check owner dropdown specifically
+    const ownerDropdown = document.querySelector('[data-bs-toggle="dropdown"]');
+    if (ownerDropdown) {
+        console.log('Owner dropdown found:', ownerDropdown.textContent.trim());
     }
 });
 

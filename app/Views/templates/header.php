@@ -90,6 +90,25 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 15px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            z-index: 9999 !important;
+            position: absolute !important;
+        }
+        
+        .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        .dropdown-menu:not(.show) {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+        
+        .aurora-header {
+            position: relative;
+            z-index: 1050;
         }
         
         .dropdown-item {
@@ -150,7 +169,21 @@
                         </li>
                         
                         <!-- Menu untuk Petugas -->
-                        <?php if (session()->get('role') === 'petugas'): ?>
+                        <?php 
+                        $currentRole = session()->get('role');
+                        $isLoggedIn = session()->get('isLoggedIn');
+                        
+                        // Debug: Tampilkan info role (hapus di production)
+                        echo "<!-- Debug: Role = " . ($currentRole ?? 'null') . ", LoggedIn = " . ($isLoggedIn ? 'true' : 'false') . " -->";
+                        
+                        // Debug: Tampilkan menu untuk testing
+                        if ($isLoggedIn) {
+                            echo "<!-- User is logged in with role: " . $currentRole . " -->";
+                        }
+                        ?>
+                        
+                        <?php if ($isLoggedIn && $currentRole === 'petugas'): ?>
+                            <!-- Menu Dropdown untuk Petugas -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                     <i class="fas fa-car me-2"></i>Parkir
@@ -168,7 +201,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="<?= site_url('/cetak-struk') ?>">
-                                            <i class="fas fa-print me-2"></i>Cetak Struk
+                                            <i class="fas fa-print me-2"></i>Daftar Struk
                                         </a>
                                     </li>
                                 </ul>
@@ -176,7 +209,7 @@
                         <?php endif; ?>
                         
                         <!-- Menu untuk Admin & Superadmin -->
-                        <?php if (in_array(session()->get('role'), ['admin', 'superadmin'])): ?>
+                        <?php if (in_array($currentRole, ['admin', 'superadmin'])): ?>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                     <i class="fas fa-cogs me-2"></i>Manajemen
@@ -211,6 +244,7 @@
                             </li>
                         <?php endif; ?>
                         
+
                         <!-- Menu untuk Owner -->
                         <?php if (session()->get('role') === 'owner'): ?>
                             <li class="nav-item dropdown">

@@ -153,7 +153,7 @@ class LogAktivitasController extends BaseController
         $output = fopen('php://output', 'w');
 
         // Header CSV
-        fputcsv($output, ['ID', 'Username', 'Nama Lengkap', 'Aktivitas', 'Waktu', 'IP Address', 'User Agent']);
+        fputcsv($output, ['ID', 'Username', 'Nama Lengkap', 'Aktivitas', 'Waktu', 'IP Address']);
 
         // Data CSV
         foreach ($logs as $log) {
@@ -163,8 +163,7 @@ class LogAktivitasController extends BaseController
                 $log['nama_lengkap'],
                 $log['aktivitas'],
                 $log['waktu_aktivitas'],
-                $log['ip_address'],
-                $log['user_agent']
+                $log['ip_address']
             ]);
         }
 

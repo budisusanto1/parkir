@@ -82,6 +82,18 @@
             </div>
 
             <div class="mb-3">
+                <label for="jenis_kendaraan">Jenis Kendaraan:</label>
+                <select id="jenis_kendaraan" name="jenis_kendaraan" required>
+                    <option value="">Pilih Jenis</option>
+                    <option value="mobil">Mobil</option>
+                    <option value="motor">Motor</option>
+                    <option value="truk">Truk</option>
+                    <option value="bus">Bus</option>
+                    <option value="lainnya">Lainnya</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label for="nama_lengkap" class="form-label">
                     <i class="fas fa-id-card me-2"></i>Nama Lengkap
                 </label>
@@ -93,19 +105,7 @@
                     <i class="fas fa-lock me-2"></i>Password
                 </label>
                 <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-
-            <div class="mb-4">
-                <label for="role" class="form-label">
-                    <i class="fas fa-user-tag me-2"></i>Role
-                </label>
-                <select class="form-select" id="role" name="role" required>
-                    <option value="">Pilih Role</option>
-                    <option value="petugas">Petugas</option>
-                    <option value="admin">Admin</option>
-                    <option value="owner">Owner</option>
-                    <option value="superadmin">Super Admin</option>
-                </select>
+                <small>Minimal 6 karakter</small>
             </div>
 
             <div class="d-flex gap-2">

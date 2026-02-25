@@ -74,51 +74,29 @@
         <form action="<?= site_url('/users/update/' . $user['id_user']) ?>" method="post">
             <?= csrf_field() ?>
             
-            <div class="mb-3">
-                <label for="username" class="form-label">
-                    <i class="fas fa-user me-2"></i>Username
-                </label>
-                <input type="text" class="form-control" id="username" name="username" 
-                       value="<?= $user['username'] ?>" required>
+            <div class="form-group">
+                <label for="username">Username Baru:</label>
+                <input type="text" class="form-control" id="username" name="username" required minlength="3" maxlength="100" 
+                       value="<?= $user['username'] ?>">
+                <small>Minimal 3 karakter, harus unique</small>
             </div>
-
-            <div class="mb-3">
-                <label for="nama_lengkap" class="form-label">
-                    <i class="fas fa-id-card me-2"></i>Nama Lengkap
-                </label>
-                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" 
+            
+            <div class="form-group">
+                <label for="nama_lengkap">Nama Lengkap Baru:</label>
+                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" maxlength="255" 
                        value="<?= $user['nama_lengkap'] ?? '' ?>" placeholder="Opsional">
+                <small>Maksimal 255 karakter, boleh kosong</small>
             </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">
-                    <i class="fas fa-lock me-2"></i>Password
-                </label>
-                <input type="password" class="form-control" id="password" name="password" 
-                       placeholder="Kosongkan jika tidak diubah">
-                <small class="text-muted">Biarkan kosong jika tidak ingin mengubah password</small>
+            
+            <div class="form-group">
+                <label for="password">Password Baru:</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah password">
+                <small>Kosongkan jika tidak ingin mengubah password</small>
             </div>
-
-            <div class="mb-4">
-                <label for="role" class="form-label">
-                    <i class="fas fa-user-tag me-2"></i>Role
-                </label>
-                <select class="form-select" id="role" name="role" required>
-                    <option value="">Pilih Role</option>
-                    <option value="petugas" <?= $user['role'] === 'petugas' ? 'selected' : '' ?>>Petugas</option>
-                    <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
-                    <option value="owner" <?= $user['role'] === 'owner' ? 'selected' : '' ?>>Owner</option>
-                    <option value="superadmin" <?= $user['role'] === 'superadmin' ? 'selected' : '' ?>>Super Admin</option>
-                </select>
-            </div>
-
+            
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-submit flex-fill">
-                    <i class="fas fa-save me-2"></i>Update
-                </button>
-                <a href="<?= site_url('/users') ?>" class="btn btn-cancel flex-fill">
-                    <i class="fas fa-times me-2"></i>Batal
-                </a>
+                <button type="submit" class="btn btn-success">Update User</button>
+                <a href="<?= site_url('/users') ?>" class="btn btn-secondary">Batal</a>
             </div>
         </form>
     </div>

@@ -25,7 +25,7 @@ class TarifController extends BaseController
             return redirect()->to('/auth/login');
         }
         
-        if (!in_array(session()->get('role'), ['admin', 'superadmin'])) {
+        if (!in_array(session()->get('role'), ['admin', 'superadmin', 'petugas'])) {
             session()->setFlashdata('error', 'Akses ditolak!');
             return redirect()->to('/dashboard');
         }
@@ -147,6 +147,14 @@ class TarifController extends BaseController
         $data = [
             'tarif_per_jam' => $this->request->getPost('tarif_per_jam')
         ];
+        
+        $jenis_kendaraan = $this->request->getPost('jenis_kendaraan');
+
+        // Validasi: cek apakah tarif untuk jenis kendaraan sudah ada (exclude current record)
+        if ($this->tarifModel->isTarifExist($jenis_kendaraan, $id)) {
+            session()->setFlashdata('error', 'Tarif untuk ' . $jenis_kendaraan . ' sudah ada!');
+            return redirect()->back()->withInput();
+        }
 
         if (!$this->tarifModel->update($id, $data)) {
             // Log aktivitas gagal

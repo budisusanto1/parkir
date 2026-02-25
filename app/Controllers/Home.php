@@ -13,7 +13,7 @@ class Home extends BaseController
     {
         $this->logModel = new LogAktivitas();
     }
-    public function index(): string
+    public function index()
     {
         // Jika user sudah login, redirect ke dashboard
         if (session()->get('isLoggedIn')) {

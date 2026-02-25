@@ -91,9 +91,16 @@ class Tarif extends Model
     }
 
     // Custom method untuk cek apakah tarif sudah ada
-    public function isTarifExist($jenis_kendaraan)
+    public function isTarifExist($jenis_kendaraan, $excludeId = null)
     {
-        return $this->where('jenis_kendaraan', $jenis_kendaraan)->countAllResults() > 0;
+        $query = $this->where('jenis_kendaraan', $jenis_kendaraan);
+        
+        // Jika sedang update, exclude record yang sedang diedit
+        if ($excludeId !== null) {
+            $query = $query->where('id_tarif !=', $excludeId);
+        }
+        
+        return $query->countAllResults() > 0;
     }
 
     // Custom method untuk inisialisasi tarif default

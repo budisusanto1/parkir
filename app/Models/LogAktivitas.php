@@ -12,7 +12,7 @@ class LogAktivitas extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_user', 'aktivitas', 'waktu_aktivitas', 'ip_address', 'user_agent'];
+    protected $allowedFields    = ['id_user', 'aktivitas', 'waktu_aktivitas', 'ip_address'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,8 +32,7 @@ class LogAktivitas extends Model
         'id_user' => 'required|integer',
         'aktivitas' => 'required|max_length[255]',
         'waktu_aktivitas' => 'required|valid_date[Y-m-d H:i:s]',
-        'ip_address' => 'max_length[45]',
-        'user_agent' => 'max_length[65535]'
+        'ip_address' => 'max_length[45]'
     ];
     protected $validationMessages   = [
         'id_user' => [
@@ -50,9 +49,6 @@ class LogAktivitas extends Model
         ],
         'ip_address' => [
             'max_length' => 'IP address maksimal 45 karakter'
-        ],
-        'user_agent' => [
-            'max_length' => 'User agent maksimal 65535 karakter'
         ]
     ];
     protected $skipValidation       = false;
@@ -70,22 +66,16 @@ class LogAktivitas extends Model
     protected $afterDelete    = [];
 
     // Custom method untuk log aktivitas
-    public function logActivity($id_user, $aktivitas, $ip_address = null, $user_agent = null)
+    public function logActivity($id_user, $aktivitas, $ip_address = null)
     {
         // Ambil dari request jika tidak disediakan
-        if ($ip_address === null || $user_agent === null) {
+        if ($ip_address === null) {
             try {
                 $request = \Config\Services::request();
-                if ($ip_address === null) {
-                    $ip_address = $request->getIPAddress();
-                }
-                if ($user_agent === null) {
-                    $user_agent = $request->getUserAgent();
-                }
+                $ip_address = $request->getIPAddress();
             } catch (\Exception $e) {
                 // Fallback jika request tidak tersedia
                 $ip_address = $ip_address ?? '127.0.0.1';
-                $user_agent = $user_agent ?? 'Unknown';
             }
         }
 
@@ -93,8 +83,7 @@ class LogAktivitas extends Model
             'id_user' => $id_user,
             'aktivitas' => $aktivitas,
             'waktu_aktivitas' => date('Y-m-d H:i:s'),
-            'ip_address' => $ip_address,
-            'user_agent' => $user_agent
+            'ip_address' => $ip_address
         ];
 
         return $this->insert($data);
